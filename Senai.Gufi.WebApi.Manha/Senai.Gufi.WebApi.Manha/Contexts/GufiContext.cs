@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Senai.Gufi.WebApi.Manha.Domains
 {
@@ -28,8 +26,7 @@ namespace Senai.Gufi.WebApi.Manha.Domains
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data source=DESKTOP-1N95O0N; Initial Catalog=Gufi_Manha; integrated security=true;");
+                optionsBuilder.UseSqlServer("Data source=(localdb)\\MSSQLLocalDB; Initial Catalog=Gufi_Manha; integrated security=true;");
             }
         }
 
