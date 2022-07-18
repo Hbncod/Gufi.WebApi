@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Senai.Gufi.WebApi.Manha.Domains;
 using Senai.Gufi.WebApi.Manha.Interfaces;
+using Senai.Gufi.WebApi.Manha.Models;
 using Senai.Gufi.WebApi.Manha.Repositories;
 
 namespace Senai.Gufi.WebApi.Manha.Controllers
@@ -16,9 +13,11 @@ namespace Senai.Gufi.WebApi.Manha.Controllers
     public class TiposEventoController : ControllerBase
     {
         private ITipoEventoRepository _tipoEventoRepository { get; set; }
+        private readonly IMapper _mapper;
 
-        public TiposEventoController()
+        public TiposEventoController(IMapper mapper)
         {
+            _mapper = mapper;
             _tipoEventoRepository = new TipoEventoRepository();
         }
 
@@ -35,26 +34,23 @@ namespace Senai.Gufi.WebApi.Manha.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(TipoEvento novoTipoEvento)
+        public IActionResult Post(TipoEventoModel novoTipoEvento)
         {
-            _tipoEventoRepository.Cadastrar(novoTipoEvento);
+            var tipoEvento = _mapper.Map<TipoEvento>(novoTipoEvento);
+            _tipoEventoRepository.Cadastrar(tipoEvento);
 
             return StatusCode(201);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, TipoEvento tipoEventoAtualizado)
+        public IActionResult Put(int id, TipoEventoModel tipoEventoAtualizado)
         {
-            try
-            {
-                _tipoEventoRepository.Atualizar(id, tipoEventoAtualizado);
+            var tipoEvento = _mapper.Map<TipoEvento>(tipoEventoAtualizado);
 
-                return StatusCode(204);
-            }
-            catch (Exception erro)
-            {
-                return BadRequest(erro);
-            }            
+            _tipoEventoRepository.Atualizar(id, tipoEvento);
+
+            return StatusCode(204);
+
         }
 
         [HttpDelete("{id}")]
