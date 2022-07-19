@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Senai.Gufi.WebApi.Manha.Configuration;
 
 namespace Senai.Gufi.WebApi.Manha
 {
@@ -10,6 +11,8 @@ namespace Senai.Gufi.WebApi.Manha
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ResolveDependencias();
+
             services.AddAutoMapper(typeof(Startup));
             services.AddMvc();
         }

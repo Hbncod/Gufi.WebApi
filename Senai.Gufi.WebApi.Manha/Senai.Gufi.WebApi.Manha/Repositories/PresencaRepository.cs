@@ -3,34 +3,38 @@ using Senai.Gufi.WebApi.Manha.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Senai.Gufi.WebApi.Manha.Repositories
 {
     public class PresencaRepository : IPresencaRepository
     {
-        GufiContext ctx = new GufiContext();
+        private readonly GufiContext _context;
+
+        public PresencaRepository(GufiContext context)
+        {
+            _context = context;
+        }
 
         public void Inscricao(Presenca novaPresenca)
         {
             novaPresenca.IdPresenca = 0;
             novaPresenca.Situacao = "Aguardando";
             int verificacao = VerificarseEstaInscrito(novaPresenca);
-            if(verificacao == 0)
+            if (verificacao == 0)
             {
-                ctx.Presenca.Add(novaPresenca);
-                ctx.SaveChanges();
+                _context.Presenca.Add(novaPresenca);
+                _context.SaveChanges();
             }
         }
 
         public List<Presenca> Listar()
         {
-            return ctx.Presenca.ToList();
+            return _context.Presenca.ToList();
         }
 
         public List<Presenca> ListarMeusEventos(int id)
         {
-            return ctx.Presenca.Where(p => p.IdUsuario == id).ToList();
+            return _context.Presenca.Where(p => p.IdUsuario == id).ToList();
         }
 
         public int VerificarseEstaInscrito(Presenca novaPresenca)

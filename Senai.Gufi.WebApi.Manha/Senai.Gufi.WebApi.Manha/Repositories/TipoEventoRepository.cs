@@ -1,49 +1,51 @@
 ﻿using Senai.Gufi.WebApi.Manha.Domains;
 using Senai.Gufi.WebApi.Manha.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Senai.Gufi.WebApi.Manha.Repositories
 {
     public class TipoEventoRepository : ITipoEventoRepository
     {
-        GufiContext ctx = new GufiContext();
+        private readonly GufiContext _context;
+        public TipoEventoRepository(GufiContext context)
+        {
+            _context = context;
+        }
 
         public void Atualizar(int id, TipoEvento tipoEventoAtualizado)
         {
-            TipoEvento tipoEventoBuscado = ctx.TipoEvento.Find(id);
+            TipoEvento tipoEventoBuscado = _context.TipoEvento.Find(id);
 
             tipoEventoBuscado.TituloTipoEvento = tipoEventoAtualizado.TituloTipoEvento;
 
-            ctx.TipoEvento.Update(tipoEventoBuscado);
+            _context.TipoEvento.Update(tipoEventoBuscado);
 
-            ctx.SaveChanges();
+            _context.SaveChanges();
         }
 
         public TipoEvento BuscarPorId(int id)
         {
-            return ctx.TipoEvento.FirstOrDefault(te => te.IdTipoEvento == id);
+            return _context.TipoEvento.FirstOrDefault(te => te.IdTipoEvento == id);
         }
 
         public void Cadastrar(TipoEvento novoTipoEvento)
         {
-            ctx.TipoEvento.Add(novoTipoEvento);
+            _context.TipoEvento.Add(novoTipoEvento);
 
-            ctx.SaveChanges();
+            _context.SaveChanges();
         }
 
         public void Deletar(int id)
         {
-            ctx.TipoEvento.Remove(BuscarPorId(id));
+            _context.TipoEvento.Remove(BuscarPorId(id));
 
-            ctx.SaveChanges();
+            _context.SaveChanges();
         }
 
         public List<TipoEvento> Listar()
         {
-            return ctx.TipoEvento.ToList();
+            return _context.TipoEvento.ToList();
         }
     }
 }

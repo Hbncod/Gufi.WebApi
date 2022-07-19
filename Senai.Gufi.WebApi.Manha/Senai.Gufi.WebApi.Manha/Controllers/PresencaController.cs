@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Senai.Gufi.WebApi.Manha.Domains;
 using Senai.Gufi.WebApi.Manha.Interfaces;
-using Senai.Gufi.WebApi.Manha.Repositories;
 
 namespace Senai.Gufi.WebApi.Manha.Controllers
 {
@@ -15,26 +9,27 @@ namespace Senai.Gufi.WebApi.Manha.Controllers
     [ApiController]
     public class PresencaController : ControllerBase
     {
-        private IPresencaRepository _presencaRepository { get; set; }
+        private IPresencaRepository _repository { get; set; }
 
-        public PresencaController()
+        public PresencaController(IPresencaRepository repository)
         {
-            _presencaRepository = new PresencaRepository();
+            _repository = repository;
         }
+
         [HttpGet]
         public IActionResult Listar()
         {
-            return Ok(_presencaRepository.Listar());
+            return Ok(_repository.Listar());
         }
         [HttpGet("{id}")]
         public IActionResult ListarMeusEventos(int id)
         {
-            return Ok(_presencaRepository.ListarMeusEventos(id));
+            return Ok(_repository.ListarMeusEventos(id));
         }
         [HttpPost]
         public IActionResult Inscrever(Presenca novaPresenca)
         {
-            _presencaRepository.Inscricao(novaPresenca);
+            _repository.Inscricao(novaPresenca);
 
             return Ok();
         }
