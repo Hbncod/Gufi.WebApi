@@ -1,16 +1,17 @@
 ﻿using Senai.Gufi.WebApi.Manha.Domains;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Senai.Gufi.WebApi.Manha.Interfaces
 {
     public interface IPresencaRepository
     {
-        List<Presenca> Listar();
+        Task<List<Presenca>> Listar();
 
-        List<Presenca> ListarMeusEventos(int id);
+        Task<List<Presenca>> ListarMeusEventos(int id);
 
-        void Inscricao(Presenca novaPresenca);
+        Task Inscricao(Presenca novaPresenca);
 
-        int VerificarseEstaInscrito(Presenca novaPresenca);
+        Task<int> VerificarseEstaInscrito(Presenca novaPresenca);
     }
 }

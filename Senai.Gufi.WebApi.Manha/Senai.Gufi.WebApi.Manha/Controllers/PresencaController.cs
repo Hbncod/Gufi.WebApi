@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Senai.Gufi.WebApi.Manha.Domains;
 using Senai.Gufi.WebApi.Manha.Interfaces;
+using System.Threading.Tasks;
 
 namespace Senai.Gufi.WebApi.Manha.Controllers
 {
@@ -17,19 +18,19 @@ namespace Senai.Gufi.WebApi.Manha.Controllers
         }
 
         [HttpGet]
-        public IActionResult Listar()
+        public async Task<IActionResult> Listar()
         {
-            return Ok(_repository.Listar());
+            return Ok(await _repository.Listar());
         }
         [HttpGet("{id}")]
-        public IActionResult ListarMeusEventos(int id)
+        public async Task<IActionResult> ListarMeusEventos(int id)
         {
-            return Ok(_repository.ListarMeusEventos(id));
+            return Ok(await _repository.ListarMeusEventos(id));
         }
         [HttpPost]
-        public IActionResult Inscrever(Presenca novaPresenca)
+        public async Task<IActionResult> Inscrever(Presenca novaPresenca)
         {
-            _repository.Inscricao(novaPresenca);
+            await _repository.Inscricao(novaPresenca);
 
             return Ok();
         }

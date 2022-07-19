@@ -1,8 +1,10 @@
-﻿using Senai.Gufi.WebApi.Manha.Domains;
+﻿using Microsoft.EntityFrameworkCore;
+using Senai.Gufi.WebApi.Manha.Domains;
 using Senai.Gufi.WebApi.Manha.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Senai.Gufi.WebApi.Manha.Repositories
 {
@@ -15,31 +17,29 @@ namespace Senai.Gufi.WebApi.Manha.Repositories
             _context = context;
         }
 
-        public void Inscricao(Presenca novaPresenca)
+        public async Task Inscricao(Presenca novaPresenca)
         {
-            novaPresenca.IdPresenca = 0;
-            novaPresenca.Situacao = "Aguardando";
-            int verificacao = VerificarseEstaInscrito(novaPresenca);
+            int verificacao = await VerificarseEstaInscrito(novaPresenca);
             if (verificacao == 0)
             {
-                _context.Presenca.Add(novaPresenca);
-                _context.SaveChanges();
+                await _context.Presenca.AddAsync(novaPresenca);
+                await _context.SaveChangesAsync();
             }
         }
 
-        public List<Presenca> Listar()
+        public async Task<List<Presenca>> Listar()
         {
-            return _context.Presenca.ToList();
+            return await _context.Presenca.ToListAsync();
         }
 
-        public List<Presenca> ListarMeusEventos(int id)
+        public async Task<List<Presenca>> ListarMeusEventos(int id)
         {
-            return _context.Presenca.Where(p => p.IdUsuario == id).ToList();
+            return await _context.Presenca.Where(p => p.IdUsuario == id).ToListAsync();
         }
 
-        public int VerificarseEstaInscrito(Presenca novaPresenca)
+        public async Task<int> VerificarseEstaInscrito(Presenca novaPresenca)
         {
-            List<Presenca> presencas = ListarMeusEventos(Convert.ToInt32(novaPresenca.IdUsuario));
+            var presencas = await ListarMeusEventos(Convert.ToInt32(novaPresenca.IdUsuario));
             int verificacao = 0;
             foreach (var presenca in presencas)
             {

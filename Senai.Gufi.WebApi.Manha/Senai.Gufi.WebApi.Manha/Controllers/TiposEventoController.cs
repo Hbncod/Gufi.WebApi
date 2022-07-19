@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Senai.Gufi.WebApi.Manha.Domains;
 using Senai.Gufi.WebApi.Manha.Interfaces;
 using Senai.Gufi.WebApi.Manha.Models;
+using System.Threading.Tasks;
 
 namespace Senai.Gufi.WebApi.Manha.Controllers
 {
@@ -21,41 +22,41 @@ namespace Senai.Gufi.WebApi.Manha.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(_repository.Listar());
+            return Ok(await _repository.Listar());
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            return Ok(_repository.BuscarPorId(id));
+            return Ok(await _repository.BuscarPorId(id));
         }
 
         [HttpPost]
-        public IActionResult Post(TipoEventoModel novoTipoEvento)
+        public async Task<IActionResult> Post(TipoEventoModel novoTipoEvento)
         {
             var tipoEvento = _mapper.Map<TipoEvento>(novoTipoEvento);
-            _repository.Cadastrar(tipoEvento);
+            await _repository.Cadastrar(tipoEvento);
 
             return StatusCode(201);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, TipoEventoModel tipoEventoAtualizado)
+        public async Task<IActionResult> Put(int id, TipoEventoModel tipoEventoAtualizado)
         {
             var tipoEvento = _mapper.Map<TipoEvento>(tipoEventoAtualizado);
 
-            _repository.Atualizar(id, tipoEvento);
+            await _repository.Atualizar(id, tipoEvento);
 
             return StatusCode(204);
 
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _repository.Deletar(id);
+            await _repository.Deletar(id);
 
             return StatusCode(204);
         }

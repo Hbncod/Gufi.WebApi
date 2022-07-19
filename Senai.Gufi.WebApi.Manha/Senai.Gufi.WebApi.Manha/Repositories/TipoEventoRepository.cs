@@ -1,11 +1,12 @@
-﻿using Senai.Gufi.WebApi.Manha.Domains;
+﻿using Microsoft.EntityFrameworkCore;
+using Senai.Gufi.WebApi.Manha.Domains;
 using Senai.Gufi.WebApi.Manha.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace Senai.Gufi.WebApi.Manha.Repositories
 {
-    public class TipoEventoRepository : ITipoEventoRepository
+    internal class TipoEventoRepository : ITipoEventoRepository
     {
         private readonly GufiContext _context;
         public TipoEventoRepository(GufiContext context)
@@ -13,39 +14,39 @@ namespace Senai.Gufi.WebApi.Manha.Repositories
             _context = context;
         }
 
-        public void Atualizar(int id, TipoEvento tipoEventoAtualizado)
+        public async Task Atualizar(int id, TipoEvento tipoEventoAtualizado)
         {
-            TipoEvento tipoEventoBuscado = _context.TipoEvento.Find(id);
+            var tipoEventoBuscado = await _context.TipoEvento.FindAsync(id);
 
             tipoEventoBuscado.TituloTipoEvento = tipoEventoAtualizado.TituloTipoEvento;
 
-            _context.TipoEvento.Update(tipoEventoBuscado);
+            _context.TipoEvento.Attach(tipoEventoBuscado);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public TipoEvento BuscarPorId(int id)
+        public async Task<TipoEvento> BuscarPorId(int id)
         {
-            return _context.TipoEvento.FirstOrDefault(te => te.IdTipoEvento == id);
+            return await _context.TipoEvento.FirstOrDefaultAsync(x => x.IdTipoEvento == id);
         }
 
-        public void Cadastrar(TipoEvento novoTipoEvento)
+        public async Task Cadastrar(TipoEvento novoTipoEvento)
         {
-            _context.TipoEvento.Add(novoTipoEvento);
+            await _context.TipoEvento.AddAsync(novoTipoEvento);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Deletar(int id)
+        public async Task Deletar(int id)
         {
-            _context.TipoEvento.Remove(BuscarPorId(id));
+            _context.TipoEvento.Remove(await BuscarPorId(id));
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public List<TipoEvento> Listar()
+        public async Task<List<TipoEvento>> Listar()
         {
-            return _context.TipoEvento.ToList();
+            return await _context.TipoEvento.ToListAsync();
         }
     }
 }
